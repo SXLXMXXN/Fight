@@ -10,15 +10,15 @@ namespace Fight
     {
         public enum WarriorType { Infantry, Archer, Cavalry };
         public WarriorType _Type;
-        public int Level { get; private set; }
-        public int Ammunition { get; private set; }
-        public int Speed { get; private set; }
-        public int Health { get; private set; }
-        public int ID;
+        public int Level { get;  set; }
+        public int Ammunition { get;  set; }
+        public int Speed { get;  set; }
+        public int Health { get;  set; }
+        //public int ID;
         public bool HasMoved = false;
 
 
-        public Fighter(WarriorType t, int l, int a, int s, int id) { _Type = t; Level = l; Ammunition = a; Speed = s; ID = id; InitHealth(); }
+        //public Fighter(WarriorType t, int l, int a, int s) { _Type = t; Level = l; Ammunition = a; Speed = s; InitHealth(); }
 
         public static int MinLevel => 1;
         public static int MaxLevel => 6;
@@ -54,10 +54,12 @@ namespace Fight
         public static string TypeInfantry => WarriorType.Infantry.ToString().ToLower();
         public static string TypeArcher => WarriorType.Archer.ToString().ToLower();
         public static string TypeCavalry => WarriorType.Cavalry.ToString().ToLower();
-        //public static WarriorType FromString(string source)
-        //{
-        //    return Enum.Parse<WarriorType>(source, true);
-        //}
+        public static WarriorType FromString(string source)
+        {
+            bool result = Enum.TryParse(source, out WarriorType type);
+            
+            return type;
+        }
 
         public void InitHealth()
         {
@@ -66,7 +68,7 @@ namespace Fight
 
         public override string ToString()
         {
-            return $"[{ID}] [{_Type}] lvl [{Level}] ammo [{Ammunition}] spd [{Speed}] health [{Health}]";
+            return $"[{_Type}] lvl [{Level}] ammo [{Ammunition}] spd [{Speed}] health [{Health}]";
         }
     }
 }

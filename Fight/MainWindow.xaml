@@ -28,9 +28,11 @@
         </Viewbox>
 
         <Viewbox Margin="10,10,10,19" Grid.Row="1" Grid.RowSpan="2">
-            <ListView Height="189" >
-            <ListView.View>
-                <GridView>
+            <ListView Name="leftlist" Height="189" >
+                <ListView.Resources>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Type}" Header="Type"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Level}" Header="Level"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Ammo}" Header="Ammo"/>

@@ -51,16 +51,6 @@ namespace Fight
             }
             return alive;
         }
-        public Fighter GetByID(int id)
-        {
-            for (int i = 0; i < Fighters.Count; i++)
-            {
-                if (Fighters[i].ID == id)
-                {
-                    return Fighters[i];
-                }
-            }
-            return null;
-        }
+        
     }
 }
