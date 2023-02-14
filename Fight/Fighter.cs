@@ -10,15 +10,15 @@ namespace Fight
     {
         public enum WarriorType { Infantry, Archer, Cavalry };
         public WarriorType _Type;
+        public string Type => _Type.ToString();
         public int Level { get;  set; }
         public int Ammunition { get;  set; }
         public int Speed { get;  set; }
         public int Health { get;  set; }
-        //public int ID;
         public bool HasMoved = false;
 
 
-        //public Fighter(WarriorType t, int l, int a, int s) { _Type = t; Level = l; Ammunition = a; Speed = s; InitHealth(); }
+        public Fighter(WarriorType t, int l, int a, int s) { _Type = t; Level = l; Ammunition = a; Speed = s; InitHealth(); }
 
         public static int MinLevel => 1;
         public static int MaxLevel => 6;
@@ -56,7 +56,7 @@ namespace Fight
         public static string TypeCavalry => WarriorType.Cavalry.ToString().ToLower();
         public static WarriorType FromString(string source)
         {
-            bool result = Enum.TryParse(source, out WarriorType type);
+            bool result = Enum.TryParse(source, true, out WarriorType type);
             
             return type;
         }

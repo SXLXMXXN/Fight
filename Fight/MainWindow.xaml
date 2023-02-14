@@ -28,7 +28,7 @@
         </Viewbox>
 
         <Viewbox Margin="10,10,10,19" Grid.Row="1" Grid.RowSpan="2">
-            <ListView Name="leftlist" Height="189" >
+            <ListView Name="leftlist" Height="186" >
                 <ListView.Resources>
                 </ListView.Resources>
                 <ListView.View>
@@ -41,10 +41,20 @@
             </ListView.View>
         </ListView>
         </Viewbox>
-        
 
-        <ListBox Grid.Column="2" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,19" Grid.RowSpan="2"/>
-        
+
+        <ListView Name="rightlist" Grid.Column="2" Grid.Row="1"  Margin="10,10,10,19" Grid.RowSpan="2">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Type}" Header="Type"/> 
+                    <GridViewColumn DisplayMemberBinding="{Binding Level}" Header="Level"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Ammunition}" Header="Ammo"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Speed}" Header="Speed"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Health}" Header="HP"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
         <ListBox Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,10" Grid.Row="1" Grid.RowSpan="2"/>
         
         <Viewbox Grid.Row="2" Margin="0,0,0,0" MinHeight="20" MinWidth="20" VerticalAlignment="Bottom"   >

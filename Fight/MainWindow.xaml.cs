@@ -27,7 +27,7 @@ namespace Fight
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            AddPerson add = new AddPerson();
+            AddPerson add = new AddPerson(this);
             add.Show();
         }
     }

@@ -20,11 +20,11 @@ namespace Fight
     public partial class AddPerson : Window
     {
         private Random _rnd = new Random();
-        MainWindow mainWindow;
+        MainWindow main;
 
-        public AddPerson()
+        public AddPerson(MainWindow mainWindow)
         {
-            mainWindow = new MainWindow();
+            main = mainWindow;
             InitializeComponent();
         }
 
@@ -85,16 +85,14 @@ namespace Fight
                 else
                 {
                     type = Type.Text;
+                    
                 }
                 level = InputCheck(Level.Text, Fighter.MinLevel, Fighter.MaxLevel);
                 ammo = InputCheck(Ammo.Text, Fighter.MinAmmunition, Fighter.MaxAmmunition);
                 speed = InputCheck(Speed.Text, Fighter.GetMinSpeed(Fighter.FromString(type)), Fighter.GetMaxSpeed(Fighter.FromString(type)));
-                //Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed);
-                Fighter fighter = new Fighter() {_Type = Fighter.FromString(type), Level = level, Ammunition = ammo, Speed = speed };
-                mainWindow.leftlist.Items.Add(fighter);
+                Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed);
+                main.leftlist.Items.Add(fighter);
                 Level.Text = null;
-                Console.WriteLine($"{Fighter.FromString(type)}, {level}, {ammo}, {speed}");
-                Console.WriteLine($"{mainWindow.leftlist.Items.Count}");
             }    
 
             
