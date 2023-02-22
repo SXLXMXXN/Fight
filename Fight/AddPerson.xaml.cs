@@ -21,11 +21,14 @@ namespace Fight
     {
         private Random _rnd = new Random();
         MainWindow main;
+        string btnName;
 
-        public AddPerson(MainWindow mainWindow)
+        public AddPerson(MainWindow mainWindow, string buttonName)
         {
             main = mainWindow;
+            btnName = buttonName;
             InitializeComponent();
+            
         }
 
         private int InputCheck(string input, int min, int max)
@@ -90,8 +93,17 @@ namespace Fight
                 level = InputCheck(Level.Text, Fighter.MinLevel, Fighter.MaxLevel);
                 ammo = InputCheck(Ammo.Text, Fighter.MinAmmunition, Fighter.MaxAmmunition);
                 speed = InputCheck(Speed.Text, Fighter.GetMinSpeed(Fighter.FromString(type)), Fighter.GetMaxSpeed(Fighter.FromString(type)));
-                Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed);
-                main.leftlist.Items.Add(fighter);
+                if (btnName == "leftAdd")
+                {
+                    Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed);
+                    main.leftlist.Items.Add(fighter);
+                }
+                else
+                {
+                    Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed);
+                    main.rightlist.Items.Add(fighter);
+                }
+                
                 Level.Text = null;
             }    
 
