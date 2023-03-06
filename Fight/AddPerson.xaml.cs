@@ -20,15 +20,16 @@ namespace Fight
     public partial class AddPerson : Window
     {
         private Random _rnd = new Random();
-        MainWindow main;
-        string btnName;
+        private MainWindow _main;
+        private Controller _controller;
+        private string _btnName;
 
-        public AddPerson(MainWindow mainWindow, string buttonName)
+        public AddPerson(MainWindow mainWindow, string buttonName, Controller controller)
         {
-            main = mainWindow;
-            btnName = buttonName;
+            _main = mainWindow;
+            _btnName = buttonName;
+            _controller = controller;
             InitializeComponent();
-            
         }
 
         private int InputCheck(string input, int min, int max)
@@ -61,6 +62,7 @@ namespace Fight
             int level;
             int ammo;
             int speed;
+            
             for(int i = 0; i < Amount.Text.Length; i++)
             {
                 if (char.IsLetter(Amount.Text[i]))
@@ -88,29 +90,27 @@ namespace Fight
                 else
                 {
                     type = Type.Text;
-                    
                 }
                 level = InputCheck(Level.Text, Fighter.MinLevel, Fighter.MaxLevel);
                 ammo = InputCheck(Ammo.Text, Fighter.MinAmmunition, Fighter.MaxAmmunition);
                 speed = InputCheck(Speed.Text, Fighter.GetMinSpeed(Fighter.FromString(type)), Fighter.GetMaxSpeed(Fighter.FromString(type)));
-                if (btnName == "leftAdd")
+                if (_btnName == "leftAdd")
                 {
-                    Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed);
-                    main.leftlist.Items.Add(fighter);
+                    Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed, _controller.GetID("left"));
+                    _main.leftlist.Items.Add(new ListViewItem() { Content = fighter });
                 }
                 else
                 {
-                    Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed);
-                    main.rightlist.Items.Add(fighter);
+                    Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed, _controller.GetID("right"));
+                    _main.rightlist.Items.Add(new ListViewItem() { Content = fighter});
                 }
-                
                 Level.Text = null;
-            }    
+            }        
+        }
 
-            
-
-            
-                
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _main.IsEnabled = true;
         }
     }
 }

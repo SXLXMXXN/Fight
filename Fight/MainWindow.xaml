@@ -20,11 +20,11 @@
         </Grid.ColumnDefinitions>
 
         <Viewbox Grid.Column="1" Margin="10,10,10,10">
-            <Button  Content="Reset"  Width="150" Click="Button_Click_1" />
+            <Button  Content="Reset"  Width="150" Click="Reset_Btn_Click" />
         </Viewbox>
 
         <Viewbox Grid.Column="1" Grid.Row="3" Margin="10,10,10,10">
-            <Button  Content="Start"  Width="150" Click="Start_Click" />
+            <Button Name="StartBtn" Content="Start"  Width="150" Click="Start_Click" />
         </Viewbox>
 
 
@@ -33,6 +33,7 @@
             </ListView.Resources>
             <ListView.View>
                 <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding ID}" Header="ID"  />
                     <GridViewColumn DisplayMemberBinding="{Binding Type}" Header="Type"  />
                     <GridViewColumn DisplayMemberBinding="{Binding Level}" Header="Level"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Ammunition}" Header="Ammo"/>
@@ -53,6 +54,7 @@
         <ListView Name="rightlist" Grid.Column="2" Grid.Row="1"  Margin="10,10,10,19" Grid.RowSpan="2" SizeChanged="listView_SizeChanged" >
             <ListView.View>
                 <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding ID}" Header="ID"  />
                     <GridViewColumn DisplayMemberBinding="{Binding Type}" Header="Type"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Level}" Header="Level"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Ammunition}" Header="Ammo"/>
@@ -69,10 +71,10 @@
             </ListView.View>
         </ListView>
 
-        <ListBox Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,10" Grid.Row="1" Grid.RowSpan="2"/>
+        <ListBox Grid.Column="1" Name="LogOutput" Margin="10,10,10,10" Grid.Row="1" Grid.RowSpan="2"/>
 
         <Viewbox Grid.Row="2" Margin="0,0,0,0" MinHeight="20" MinWidth="20" VerticalAlignment="Bottom"   >
-            <Button Content="+" Name="leftAdd" Foreground="#FF139E00"  Click="Button_Click" Width="17" Height="17"  >
+            <Button Content="+" Name="leftAdd" Foreground="#FF139E00"  Click="Add_Btn_Click" Width="17" Height="17"  >
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Grid >
@@ -89,7 +91,7 @@
         </Viewbox>
 
         <Viewbox Grid.Row="2" Grid.Column="2" Margin="0,0,0,0" MinHeight="20" MinWidth="20" VerticalAlignment="Bottom"   >
-            <Button Content="+" Name="rightAdd" Foreground="#FF139E00"  Click="Button_Click" Width="17" Height="17"  >
+            <Button Content="+" Name="rightAdd" Foreground="#FF139E00"  Click="Add_Btn_Click" Width="17" Height="17"  >
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Grid >

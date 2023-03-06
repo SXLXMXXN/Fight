@@ -9,44 +9,29 @@ namespace Fight
 {
     public class Controller
     {
-        public static string FileInput(string name, int count)
-        {
-            string input = "";
-            string path = $"C:\\Users\\SOLOMOON\\Documents\\Lessons\\{name}.txt";
+        private MainWindow _mainWindow;
 
-            if (File.Exists(path))
+        public Controller (MainWindow m) { _mainWindow = m; }
+
+        public int LeftID = 0;
+        public int RightID = 0;
+
+        public int GetID(string army)
+        {
+            int result = 0;
+            if (army == "left")
             {
-                string[] Fighters = File.ReadAllLines(path);
-                input = Fighters[count];
+                result = LeftID;
+                LeftID++;
             }
-            else
+            else if (army == "right")
             {
-                return "manual input";
+                result = RightID;
+                RightID++;
             }
-            string[] words = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if (words.Length == 4)
-            {
-                input = $"add " + input;
-            }
-            return input;
+            return result;
         }
-        //public static bool TryParseAmount(string word, int low, int high, out int output)
-        //{
-        //    bool result = Int32.TryParse(word, out output);
-        //    if (word == "*")
-        //    {
-        //        Random rnd = new Random();
-        //        output = rnd.Next(low, high);
-        //        result = true;
-        //    }
-        //    else if (result == false)
-        //    {
-        //        output = 0;
-        //        return false;
-        //    }
-        //    output = Math.Clamp(output, low, high - 1);
-        //    return true;
-        //}
+
         public static List<Fighter> BubbleSortBySpeed(List<Fighter> army)
         {
             var len = army.Count;
@@ -64,6 +49,7 @@ namespace Fight
             }
             return army;
         }
+
         public static void Casting(Army army, Army army1, Action<string, string> callback)
         {
             Random rnd = new Random();
@@ -121,6 +107,7 @@ namespace Fight
             }
             return totalDamage;
         }
+
         public static int CalcDamage(Fighter fighter)
         {
             int Damage = (int)Math.Ceiling(5f + (((float)fighter.Level / 2f) * (float)fighter.Ammunition));
@@ -134,12 +121,14 @@ namespace Fight
             }
             army.HasMoved = false;
         }
+
         public static void RoundArmyResult(Army army1, Action<string, int, int, int> callback)
         {
             int alive1 = army1.GetListOfAlive().Count;
             int deadman1 = army1.Fighters.Count - alive1;
             callback(army1.Name, alive1, deadman1, army1.TotalDamage);
         }
+
         public static void RoundTotalResult(Army army1, Army army2, Action<int, int, int> callback)
         {
             int alive = army1.GetListOfAlive().Count + army2.GetListOfAlive().Count;
@@ -149,5 +138,40 @@ namespace Fight
             ReturnHasMoved(army1);
             ReturnHasMoved(army2);
         }
+
+        public void Step(Army army1, Army army2)
+        {
+            if (army1.IsAlive && army2.IsAlive)
+            {
+                Casting(army1, army2, _mainWindow.CastingResult);
+
+                if (army1.IsFirst)
+                {
+                    army1.TotalDamage += Atack(army1, army2, 5, _mainWindow.AttackResult, _mainWindow.MissResult);
+                    if (army2.IsAlive)
+                        army2.TotalDamage += Atack(army2, army1, 6, _mainWindow.AttackResult, _mainWindow.MissResult);
+                }
+                else
+                {
+                    army2.TotalDamage += Atack(army2, army1, 5, _mainWindow.AttackResult, _mainWindow.MissResult);
+                    if (army1.IsAlive)
+                        army1.TotalDamage += Atack(army1, army2, 6, _mainWindow.AttackResult, _mainWindow.MissResult);
+                }
+            }
+            _mainWindow.ConsoleProbel();
+        }
+
+        public void Round(Army army1, Army army2)
+        {
+            while ((!army1.HasMoved || !army2.HasMoved) && (army1.IsAlive && army2.IsAlive))
+            {
+                Step(army1, army2);
+            }
+            Console.WriteLine($"Round is over");
+            RoundArmyResult(army1, _mainWindow.ArmyResult);
+            RoundArmyResult(army2, _mainWindow.ArmyResult);
+            RoundTotalResult(army1, army2, _mainWindow.TotalResult);
+        }
     }
 }
+
