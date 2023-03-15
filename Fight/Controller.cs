@@ -68,11 +68,11 @@ namespace Fight
             }
         }
         
-        public static int Atack(Army army1, Army army2, float percent, Action<Fighter, Fighter, int> callbacksuccess, Action<Fighter> callbackmiss)
+        public static int Atack(Army army1, Army army2, float percent, Action<Fighter, Fighter, int> callbacksuccess, Action<Fighter> callbackmiss, Action<string, int, string, int> calbackfighters)
         {
             var fastest = army1.GetListOfFastest(percent);
             var alive = army2.GetListOfAlive();
-            Console.WriteLine($"====> Attack {army1.Name} count is {fastest.Count} on {army2.Name } count is {alive.Count}");
+            calbackfighters(army1.Name, fastest.Count, army2.Name, alive.Count);
             int totalDamage = 0;
             for (int i = 0; i < fastest.Count; i++)
             {
@@ -113,6 +113,7 @@ namespace Fight
             int Damage = (int)Math.Ceiling(5f + (((float)fighter.Level / 2f) * (float)fighter.Ammunition));
             return Damage;
         }
+
         public static void ReturnHasMoved(Army army)
         {
             for (int i = 0; i < army.Fighters.Count; i++)
@@ -147,27 +148,26 @@ namespace Fight
 
                 if (army1.IsFirst)
                 {
-                    army1.TotalDamage += Atack(army1, army2, 5, _mainWindow.AttackResult, _mainWindow.MissResult);
+                    army1.TotalDamage += Atack(army1, army2, 5, _mainWindow.AttackResult, _mainWindow.MissResult, _mainWindow.FastestTeamInfo);
                     if (army2.IsAlive)
-                        army2.TotalDamage += Atack(army2, army1, 6, _mainWindow.AttackResult, _mainWindow.MissResult);
+                        army2.TotalDamage += Atack(army2, army1, 6, _mainWindow.AttackResult, _mainWindow.MissResult, _mainWindow.FastestTeamInfo);
                 }
                 else
                 {
-                    army2.TotalDamage += Atack(army2, army1, 5, _mainWindow.AttackResult, _mainWindow.MissResult);
+                    army2.TotalDamage += Atack(army2, army1, 5, _mainWindow.AttackResult, _mainWindow.MissResult, _mainWindow.FastestTeamInfo);
                     if (army1.IsAlive)
-                        army1.TotalDamage += Atack(army1, army2, 6, _mainWindow.AttackResult, _mainWindow.MissResult);
+                        army1.TotalDamage += Atack(army1, army2, 6, _mainWindow.AttackResult, _mainWindow.MissResult, _mainWindow.FastestTeamInfo);
                 }
             }
-            _mainWindow.ConsoleProbel();
         }
 
-        public void Round(Army army1, Army army2)
+        public void Round(Army army1, Army army2, Action<string> end)
         {
             while ((!army1.HasMoved || !army2.HasMoved) && (army1.IsAlive && army2.IsAlive))
             {
                 Step(army1, army2);
             }
-            Console.WriteLine($"Round is over");
+            end("Round is over");
             RoundArmyResult(army1, _mainWindow.ArmyResult);
             RoundArmyResult(army2, _mainWindow.ArmyResult);
             RoundTotalResult(army1, army2, _mainWindow.TotalResult);

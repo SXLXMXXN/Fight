@@ -18,7 +18,6 @@ namespace Fight
         public int ID { get; set; }
         public bool HasMoved = false;
 
-
         public Fighter(WarriorType t, int l, int a, int s, int id) { _Type = t; Level = l; Ammunition = a; Speed = s; InitHealth(); ID = id; }
 
         public static int MinLevel => 1;
@@ -26,7 +25,6 @@ namespace Fight
         public static int MinAmmunition => 1;
         public static int MaxAmmunition => 6;
         public bool IsAlive => Health > 0;
-        
 
         public void AddHealth(int health)
         {

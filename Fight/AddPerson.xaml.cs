@@ -97,12 +97,12 @@ namespace Fight
                 if (_btnName == "leftAdd")
                 {
                     Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed, _controller.GetID("left"));
-                    _main.leftlist.Items.Add(new ListViewItem() { Content = fighter });
+                    _main.leftlist.Items.Add(fighter);
                 }
                 else
                 {
                     Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed, _controller.GetID("right"));
-                    _main.rightlist.Items.Add(new ListViewItem() { Content = fighter});
+                    _main.rightlist.Items.Add(fighter);
                 }
                 Level.Text = null;
             }        

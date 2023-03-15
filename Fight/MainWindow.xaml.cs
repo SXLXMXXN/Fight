@@ -143,15 +143,19 @@ namespace Fight
 
                 for (int i = 0; i < leftlist.Items.Count; i++)
                 {
-                    var prnt = leftlist.Items[i] as ListViewItem;
-                    var res = prnt.Content as Fighter;
-                    army1.Fighters.Add(res);
+                    //var prnt = leftlist.Items[i] as ListViewItem;
+                    //var res = prnt.Content as Fighter;
+                    //army1.Fighters.Add(res);
+                    var fighter = leftlist.Items[i] as Fighter;
+                    army1.Fighters.Add(fighter);
                 }
                 for (int i = 0; i < rightlist.Items.Count; i++)
                 {
-                    var prnt = rightlist.Items[i] as ListViewItem;
-                    var res = prnt.Content as Fighter;
-                    army2.Fighters.Add(res);
+                    //var prnt = rightlist.Items[i] as ListViewItem;
+                    //var res = prnt.Content as Fighter;
+                    //army2.Fighters.Add(res);
+                    var fighter = rightlist.Items[i] as Fighter;
+                    army2.Fighters.Add(fighter);
                 }
                 StartBtn.Content = "Next Round";
                 
@@ -159,93 +163,105 @@ namespace Fight
             LogOutput.Items.Clear();
             if (army1.IsAlive && army2.IsAlive)
             {
-                _controller.Round(army1, army2);
-                CheckDead(rightlist);
-                CheckDead(leftlist);
+                _controller.Round(army1, army2, RoundOverLog);
+                SortListView(rightlist);
+                SortListView(leftlist);
             }
             else
             {
-                CheckDead(rightlist);
-                CheckDead(leftlist);
+                SortListView(rightlist);
+                SortListView(leftlist);
                 GameResult(army1, army2);
                 StartBtn.IsEnabled = false;
             }
         }
 
-        public void CheckDead(ListView listView)
+        public void UpdateList(ListView listview)
         {
-            int deadCount = 0;
-            for (int i = 0; i < listView.Items.Count - deadCount; i++)
+            for (int i = 0; i < listview.Items.Count; i++)
             {
-                var item = listView.Items[i] as ListViewItem;
-                var fighter = item.Content as Fighter;
-                if (fighter.Health < 1)
-                {
-                    item.Background = Brushes.Red;
-                        
-                    listView.Items.MoveCurrentToLast();
-                    i--;
-                    deadCount++;
-                }
-                
-                
-            }
-            
+                var fighter = listview.Items[i] as Fighter;
 
+            }
         }
 
+        public void SortListView(ListView listView)
+        {
+            listView.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("IsAlive", System.ComponentModel.ListSortDirection.Descending));
+        }
 
         public void AttackResult(Fighter fighter1, Fighter fighter2, int damage)
         {
-            LogOutput.Items.Add($"{fighter1._Type} #{fighter1.ID} caused {damage} to {fighter2._Type} #{fighter2.ID}: Fatal {!fighter2.IsAlive}");
+            var content = $"{fighter1._Type} #{fighter1.ID} caused {damage} to {fighter2._Type} #{fighter2.ID}: Fatal {!fighter2.IsAlive}";
+            if (fighter2.IsAlive)
+            {
+                LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Yellow });
+            }
+            else
+            {
+                LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Red });
+            }
         }
 
         public void MissResult(Fighter fighter)
         {
-            LogOutput.Items.Add($"{fighter._Type} #{fighter.ID} has missed");
+            var content = $"{fighter._Type} #{fighter.ID} has missed";
+            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
         }
 
         public void CastingResult(string army1, string army2)
         {
-            LogOutput.Items.Add($"Casting lots");
-            LogOutput.Items.Add($"{army1} goes first. {army2} goes second.");
+            var content = $"Casting lots";
+            var content1 = $"{army1} goes first. {army2} goes second.";
+            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
+            LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
         }
 
         public void ArmyResult(string name, int alive1, int deadman1, int totD1)
         {
-            LogOutput.Items.Add($"{name} has a {alive1} alive and a {deadman1} were killed");
-            LogOutput.Items.Add($"Total damage by {name} is {totD1}");
+            var content = $"{name} has a {alive1} alive and a {deadman1} were killed";
+            var content1 = $"Total damage by {name} is {totD1}";
+            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
+            LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
         }
-
         public void TotalResult(int alive, int deadman, int totD)
         {
-            LogOutput.Items.Add($"Total damage for round is {totD}");
-            LogOutput.Items.Add($"A total of {deadman} people were killed");
-            LogOutput.Items.Add($"A total of {alive} people still alive");
+            var content = $"Total damage for round is {totD}";
+            var content1 = $"A total of {deadman} people were killed";
+            var content2 = $"A total of {alive} people still alive";
+            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
+            LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
+            LogOutput.Items.Add(new ListBoxItem { Content = content2, Background = Brushes.Green });
         }
 
         public void GameResult(Army army1, Army army2)
         {
             if (army1.IsAlive)
             {
-                LogOutput.Items.Add($"Game Over {army2.Name} is Dead");
-                LogOutput.Items.Add($"{army1.Name} is Winner");
+                var content = $"Game Over {army2.Name} is Dead";
+                var content1 = $"{army1.Name} is Winner";
+                LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
+                LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
             }
             else
             {
-                LogOutput.Items.Add($"Game Over {army1.Name} is Dead");
-                LogOutput.Items.Add($"{army2.Name} is Winner");
+                var content = $"Game Over {army1.Name} is Dead";
+                var content1 = $"{army2.Name} is Winner";
+                LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
+                LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
             }
         }
 
-        public void ConsoleProbel()
+        public void FastestTeamInfo(string name1, int count1, string name2, int count2)
         {
-            LogOutput.Items.Add("__________");
+            var content = $"====> Attack {name1} count is {count1} on {name2} count is {count2}";
+            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
         }
 
-        public void BolwoyProbel()
+        public void RoundOverLog(string action)
         {
-            LogOutput.Items.Add("\r\noooooooooooooooooooooooooooooooooooooooooooooooooooooooooo\r\n");
+            var content = action;
+            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
         }
     }
 }
