@@ -24,6 +24,12 @@ namespace Fight
         public Army army1 = new Army("Attackers");
         public Army army2 = new Army("Defenders");
         private int _step = 0;
+        private Brush _infoColor = Brushes.LightGreen;
+        private Brush _attackColor = Brushes.LightYellow;
+        private Brush _deathColor = Brushes.Tomato;
+
+        private ItemCollection _currentRoundLog => (LogOutput.Items[0] as ListBox).Items;
+
 
         public MainWindow()
         {
@@ -128,12 +134,14 @@ namespace Fight
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
-        {
+        { 
+            ListBox round = new ListBox();
+            LogOutput.Items.Insert(0, round);
             if (_step == 0)
             {
+                _step++;
                 leftAdd.Opacity = 0;
                 rightAdd.Opacity = 0;
-                _step++;
                 ListView leftListView = leftlist as ListView;
                 ListView rightListView = rightlist as ListView;
                 GridView leftGridView = leftListView.View as GridView;
@@ -143,45 +151,31 @@ namespace Fight
 
                 for (int i = 0; i < leftlist.Items.Count; i++)
                 {
-                    //var prnt = leftlist.Items[i] as ListViewItem;
-                    //var res = prnt.Content as Fighter;
-                    //army1.Fighters.Add(res);
                     var fighter = leftlist.Items[i] as Fighter;
                     army1.Fighters.Add(fighter);
                 }
                 for (int i = 0; i < rightlist.Items.Count; i++)
                 {
-                    //var prnt = rightlist.Items[i] as ListViewItem;
-                    //var res = prnt.Content as Fighter;
-                    //army2.Fighters.Add(res);
                     var fighter = rightlist.Items[i] as Fighter;
                     army2.Fighters.Add(fighter);
                 }
                 StartBtn.Content = "Next Round";
                 
             }
-            LogOutput.Items.Clear();
             if (army1.IsAlive && army2.IsAlive)
             {
                 _controller.Round(army1, army2, RoundOverLog);
+                LogDelimiter();
                 SortListView(rightlist);
                 SortListView(leftlist);
-            }
-            else
-            {
-                SortListView(rightlist);
-                SortListView(leftlist);
-                GameResult(army1, army2);
-                StartBtn.IsEnabled = false;
-            }
-        }
-
-        public void UpdateList(ListView listview)
-        {
-            for (int i = 0; i < listview.Items.Count; i++)
-            {
-                var fighter = listview.Items[i] as Fighter;
-
+                if (!army1.IsAlive || !army2.IsAlive)
+                {
+                    SortListView(rightlist);
+                    SortListView(leftlist);
+                    GameResult(army1, army2);
+                    StartBtn.IsEnabled = false;
+                }
+                
             }
         }
 
@@ -195,43 +189,47 @@ namespace Fight
             var content = $"{fighter1._Type} #{fighter1.ID} caused {damage} to {fighter2._Type} #{fighter2.ID}: Fatal {!fighter2.IsAlive}";
             if (fighter2.IsAlive)
             {
-                LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Yellow });
+                _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _attackColor });
             }
             else
             {
-                LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Red });
+                _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _deathColor });
             }
         }
 
         public void MissResult(Fighter fighter)
         {
             var content = $"{fighter._Type} #{fighter.ID} has missed";
-            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
+            _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
+
         }
 
         public void CastingResult(string army1, string army2)
         {
             var content = $"Casting lots";
             var content1 = $"{army1} goes first. {army2} goes second.";
-            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
-            LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
+            _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
+            _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
+
         }
 
         public void ArmyResult(string name, int alive1, int deadman1, int totD1)
         {
             var content = $"{name} has a {alive1} alive and a {deadman1} were killed";
             var content1 = $"Total damage by {name} is {totD1}";
-            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
-            LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
+            _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
+            _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
+
         }
         public void TotalResult(int alive, int deadman, int totD)
         {
             var content = $"Total damage for round is {totD}";
             var content1 = $"A total of {deadman} people were killed";
             var content2 = $"A total of {alive} people still alive";
-            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
-            LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
-            LogOutput.Items.Add(new ListBoxItem { Content = content2, Background = Brushes.Green });
+            _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
+            _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
+            _currentRoundLog.Add(new ListBoxItem { Content = content2, Background = _infoColor });
+
         }
 
         public void GameResult(Army army1, Army army2)
@@ -240,28 +238,39 @@ namespace Fight
             {
                 var content = $"Game Over {army2.Name} is Dead";
                 var content1 = $"{army1.Name} is Winner";
-                LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
-                LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
+                _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
+                _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
+
             }
             else
             {
                 var content = $"Game Over {army1.Name} is Dead";
                 var content1 = $"{army2.Name} is Winner";
-                LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
-                LogOutput.Items.Add(new ListBoxItem { Content = content1, Background = Brushes.Green });
+                _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
+                _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
+
             }
         }
 
         public void FastestTeamInfo(string name1, int count1, string name2, int count2)
         {
             var content = $"====> Attack {name1} count is {count1} on {name2} count is {count2}";
-            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
+            _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
+
         }
 
         public void RoundOverLog(string action)
         {
             var content = action;
-            LogOutput.Items.Add(new ListBoxItem { Content = content, Background = Brushes.Green });
+            _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
+
+        }
+
+        public void LogDelimiter()
+        {
+            var content = $"_-_-_-_-_-_-_-_-_-_-";
+            _currentRoundLog.Add(new ListBoxItem { Content = content, Background = Brushes.LightGray });
+
         }
     }
 }

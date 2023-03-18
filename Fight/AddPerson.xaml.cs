@@ -104,7 +104,7 @@ namespace Fight
                     Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed, _controller.GetID("right"));
                     _main.rightlist.Items.Add(fighter);
                 }
-                Level.Text = null;
+                
             }        
         }
 
