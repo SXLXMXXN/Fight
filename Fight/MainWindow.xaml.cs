@@ -27,8 +27,7 @@ namespace Fight
         private Brush _infoColor = Brushes.LightGreen;
         private Brush _attackColor = Brushes.LightYellow;
         private Brush _deathColor = Brushes.Tomato;
-
-        private ItemCollection _currentRoundLog => (LogOutput.Items[0] as ListBox).Items;
+        private ItemCollection _currentRoundLog => (LogOutput.Children[0] as ListBox).Items;
 
 
         public MainWindow()
@@ -51,7 +50,7 @@ namespace Fight
             StartBtn.IsEnabled = true;
             leftlist.Items.Clear();
             rightlist.Items.Clear();
-            LogOutput.Items.Clear();
+            LogOutput.Children.Clear();
             army1.Fighters.Clear();
             army2.Fighters.Clear();
             army1.IsAlive = true;
@@ -69,6 +68,7 @@ namespace Fight
             listView_SizeChanged(leftListView, null);
             listView_SizeChanged(rightListView, null);
         }
+
         private void Delete(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
@@ -130,13 +130,12 @@ namespace Fight
                 gView.Columns[5].Width = workingWidth * col6;
                 gView.Columns[6].Width = workingWidth * col7;
             }
-            
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
         { 
             ListBox round = new ListBox();
-            LogOutput.Items.Insert(0, round);
+            LogOutput.Children.Insert(0, round);
             if (_step == 0)
             {
                 _step++;
@@ -160,7 +159,6 @@ namespace Fight
                     army2.Fighters.Add(fighter);
                 }
                 StartBtn.Content = "Next Round";
-                
             }
             if (army1.IsAlive && army2.IsAlive)
             {
@@ -175,7 +173,6 @@ namespace Fight
                     GameResult(army1, army2);
                     StartBtn.IsEnabled = false;
                 }
-                
             }
         }
 
@@ -186,7 +183,7 @@ namespace Fight
 
         public void AttackResult(Fighter fighter1, Fighter fighter2, int damage)
         {
-            var content = $"{fighter1._Type} #{fighter1.ID} caused {damage} to {fighter2._Type} #{fighter2.ID}: Fatal {!fighter2.IsAlive}";
+            var content = $"{fighter1._Type} #{fighter1.ID} caused {damage} to {fighter2._Type} #{fighter2.ID}: Fatal {!fighter2.IsAlive} ({fighter2.Health + damage}/{fighter2.Health})";
             if (fighter2.IsAlive)
             {
                 _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _attackColor });
@@ -201,7 +198,6 @@ namespace Fight
         {
             var content = $"{fighter._Type} #{fighter.ID} has missed";
             _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
-
         }
 
         public void CastingResult(string army1, string army2)
@@ -210,7 +206,6 @@ namespace Fight
             var content1 = $"{army1} goes first. {army2} goes second.";
             _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
             _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
-
         }
 
         public void ArmyResult(string name, int alive1, int deadman1, int totD1)
@@ -219,7 +214,6 @@ namespace Fight
             var content1 = $"Total damage by {name} is {totD1}";
             _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
             _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
-
         }
         public void TotalResult(int alive, int deadman, int totD)
         {
@@ -229,7 +223,6 @@ namespace Fight
             _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
             _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
             _currentRoundLog.Add(new ListBoxItem { Content = content2, Background = _infoColor });
-
         }
 
         public void GameResult(Army army1, Army army2)
@@ -240,7 +233,6 @@ namespace Fight
                 var content1 = $"{army1.Name} is Winner";
                 _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
                 _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
-
             }
             else
             {
@@ -248,7 +240,6 @@ namespace Fight
                 var content1 = $"{army2.Name} is Winner";
                 _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
                 _currentRoundLog.Add(new ListBoxItem { Content = content1, Background = _infoColor });
-
             }
         }
 
@@ -256,21 +247,18 @@ namespace Fight
         {
             var content = $"====> Attack {name1} count is {count1} on {name2} count is {count2}";
             _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
-
         }
 
         public void RoundOverLog(string action)
         {
             var content = action;
             _currentRoundLog.Add(new ListBoxItem { Content = content, Background = _infoColor });
-
         }
 
         public void LogDelimiter()
         {
             var content = $"_-_-_-_-_-_-_-_-_-_-";
             _currentRoundLog.Add(new ListBoxItem { Content = content, Background = Brushes.LightGray });
-
         }
     }
 }

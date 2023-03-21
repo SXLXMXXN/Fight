@@ -61,10 +61,5 @@ namespace Fight
         {
             Health = 10 + (Level * Ammunition);
         }
-
-        public override string ToString()
-        {
-            return $"[{_Type}] lvl [{Level}] ammo [{Ammunition}] spd [{Speed}] health [{Health}]";
-        }
     }
 }

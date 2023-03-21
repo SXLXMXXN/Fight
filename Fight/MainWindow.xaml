@@ -104,7 +104,10 @@
             </ListView.View>
         </ListView>
 
-        <ListBox Grid.Column="1" Name="LogOutput" Margin="10,10,10,10" Grid.Row="1" Grid.RowSpan="2"/>
+        <ScrollViewer Grid.Column="1" Margin="10,10,10,10" Grid.Row="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel  Name="LogOutput"   />
+        </ScrollViewer>
+        
 
         <Viewbox Grid.Row="2" Margin="0,0,0,0" MinHeight="20" MinWidth="20" VerticalAlignment="Bottom"   >
             <Button Content="+" Name="leftAdd" Foreground="#FF139E00"  Click="Add_Btn_Click" Width="17" Height="17"  >

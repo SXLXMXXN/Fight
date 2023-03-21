@@ -10,9 +10,8 @@ namespace Fight
     public class Controller
     {
         private MainWindow _mainWindow;
-
+        private Random _random = new Random();
         public Controller (MainWindow m) { _mainWindow = m; }
-
         public int LeftID = 0;
         public int RightID = 0;
 
@@ -50,10 +49,10 @@ namespace Fight
             return army;
         }
 
-        public static void Casting(Army army, Army army1, Action<string, string> callback)
+        public void Casting(Army army, Army army1, Action<string, string> callback)
         {
             Random rnd = new Random();
-            int r = rnd.Next(0, 10);
+            int r = _random.Next(0, 10);
             if (r < 5)
             {
                 callback(army.Name, army1.Name);
@@ -68,7 +67,7 @@ namespace Fight
             }
         }
         
-        public static int Atack(Army army1, Army army2, float percent, Action<Fighter, Fighter, int> callbacksuccess, Action<Fighter> callbackmiss, Action<string, int, string, int> calbackfighters)
+        public int Atack(Army army1, Army army2, float percent, Action<Fighter, Fighter, int> callbacksuccess, Action<Fighter> callbackmiss, Action<string, int, string, int> calbackfighters)
         {
             var fastest = army1.GetListOfFastest(percent);
             var alive = army2.GetListOfAlive();
@@ -77,14 +76,13 @@ namespace Fight
             for (int i = 0; i < fastest.Count; i++)
             {
                 int miss = 20 - (fastest[i].Level * 2);
-                Random rnd = new Random();
-                int r = rnd.Next(0, 100);
+                int r = _random.Next(0, 100);
                 if (r > miss)
                 {
                     if (alive.Count != 0)
                     {
                         int d = CalcDamage(fastest[i]);
-                        int choosenfighter = rnd.Next(0, alive.Count);
+                        int choosenfighter = _random.Next(0, alive.Count);
                         alive[choosenfighter].AddHealth(-d);
                         fastest[i].HasMoved = true;
                         callbacksuccess(fastest[i], alive[choosenfighter], d);
