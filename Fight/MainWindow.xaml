@@ -20,11 +20,11 @@
         </Grid.ColumnDefinitions>
 
         <Viewbox Margin="10,10,10,10" >
-            <TextBlock  TextWrapping="Wrap" Text="Defenders" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+            <TextBlock  TextWrapping="Wrap" Text="Attackers" HorizontalAlignment="Center" VerticalAlignment="Center"  />
         </Viewbox>
 
         <Viewbox Margin="10,10,10,10" Grid.Column="2" >
-            <TextBlock  TextWrapping="Wrap" Text="Attackers" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+            <TextBlock  TextWrapping="Wrap" Text="Defenders" HorizontalAlignment="Center" VerticalAlignment="Center"  />
         </Viewbox>
 
         <Viewbox Grid.Column="1" Margin="10,10,10,10">
