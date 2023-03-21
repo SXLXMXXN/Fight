@@ -21,14 +21,14 @@ namespace Fight
     {
         private Random _rnd = new Random();
         private MainWindow _main;
-        private Controller _controller;
-        private string _btnName;
+        private ListView _listView;
+        private Army _army;
 
-        public AddPerson(MainWindow mainWindow, string buttonName, Controller controller)
+        public AddPerson(MainWindow mainWindow, ListView listview, Army army)
         {
             _main = mainWindow;
-            _btnName = buttonName;
-            _controller = controller;
+            _listView = listview;
+            _army = army;
             InitializeComponent();
         }
 
@@ -94,17 +94,9 @@ namespace Fight
                 level = InputCheck(Level.Text, Fighter.MinLevel, Fighter.MaxLevel);
                 ammo = InputCheck(Ammo.Text, Fighter.MinAmmunition, Fighter.MaxAmmunition);
                 speed = InputCheck(Speed.Text, Fighter.GetMinSpeed(Fighter.FromString(type)), Fighter.GetMaxSpeed(Fighter.FromString(type)));
-                if (_btnName == "leftAdd")
-                {
-                    Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed, _controller.GetID("left"));
-                    _main.leftlist.Items.Add(fighter);
-                }
-                else
-                {
-                    Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed, _controller.GetID("right"));
-                    _main.rightlist.Items.Add(fighter);
-                }
-                
+                Fighter fighter = new Fighter(Fighter.FromString(type), level, ammo, speed, _army.GetLastID);
+                _army.Fighters.Add(fighter);
+                _listView.Items.Add(fighter);
             }        
         }
 

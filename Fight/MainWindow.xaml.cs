@@ -21,14 +21,13 @@ namespace Fight
     public partial class MainWindow : Window
     {
         private Controller _controller;
-        public Army army1 = new Army("Attackers");
-        public Army army2 = new Army("Defenders");
+        private Army _army1 = new Army("Attackers");
+        private Army _army2 = new Army("Defenders");
         private int _step = 0;
         private Brush _infoColor = Brushes.LightGreen;
         private Brush _attackColor = Brushes.LightYellow;
         private Brush _deathColor = Brushes.Tomato;
         private ItemCollection _currentRoundLog => (LogOutput.Children[0] as ListBox).Items;
-
 
         public MainWindow()
         {
@@ -36,12 +35,21 @@ namespace Fight
             _controller = new Controller(this);
         }
 
-        private void Add_Btn_Click(object sender, RoutedEventArgs e)
+        private void Add_BtnLeft_Click(object sender, RoutedEventArgs e)
         {
-            var btn = sender as Button; 
-            AddPerson add = new AddPerson(this, btn.Name, _controller);
+            ShowAddPersonWindow(leftlist, _army1);
+        }
+
+        private void Add_BtnRight_Click(object sender, RoutedEventArgs e)
+        {
+            ShowAddPersonWindow(rightlist, _army2);
+        }
+
+        public void ShowAddPersonWindow(ListView listview, Army army)
+        {
+            AddPerson add = new AddPerson(this ,listview, army);
             add.Show();
-            this.IsEnabled = false;
+            IsEnabled = false;
         }
 
         private void Reset_Btn_Click(object sender, RoutedEventArgs e)
@@ -51,22 +59,14 @@ namespace Fight
             leftlist.Items.Clear();
             rightlist.Items.Clear();
             LogOutput.Children.Clear();
-            army1.Fighters.Clear();
-            army2.Fighters.Clear();
-            army1.IsAlive = true;
-            army2.IsAlive = true;
             StartBtn.Content = "Start";
-            _controller.LeftID = 0;
-            _controller.RightID = 0;
+            _army1.Reset();
+            _army2.Reset();
             leftAdd.Opacity = 1;
             rightAdd.Opacity = 1;
 
-            ListView leftListView = leftlist as ListView;
-            ListView rightListView = rightlist as ListView;
-            GridView leftGridView = leftListView.View as GridView;
-            GridView rightGridView = rightListView.View as GridView;
-            listView_SizeChanged(leftListView, null);
-            listView_SizeChanged(rightListView, null);
+            listView_SizeChanged(leftlist, null);
+            listView_SizeChanged(rightlist, null);
         }
 
         private void Delete(object sender, RoutedEventArgs e)
@@ -78,6 +78,13 @@ namespace Fight
                 if (prnt == leftlist.Items[i])
                 {
                     leftlist.Items.RemoveAt(i);
+                    for (int j = 0; j < _army1.Fighters.Count; j++)
+                    {
+                        if (_army1.Fighters[j].ID == prnt.ID)
+                        {
+                            _army1.Fighters.RemoveAt(j);
+                        }
+                    }
                 }
             }
             for (int i = 0; i < rightlist.Items.Count; i++)
@@ -85,6 +92,13 @@ namespace Fight
                 if (prnt == rightlist.Items[i])
                 {
                     rightlist.Items.RemoveAt(i);
+                    for (int j = 0; j < _army2.Fighters.Count; j++)
+                    {
+                        if (_army2.Fighters[j].ID == prnt.ID)
+                        {
+                            _army2.Fighters.RemoveAt(j);
+                        }
+                    }
                 }
             }
         }
@@ -141,36 +155,21 @@ namespace Fight
                 _step++;
                 leftAdd.Opacity = 0;
                 rightAdd.Opacity = 0;
-                ListView leftListView = leftlist as ListView;
-                ListView rightListView = rightlist as ListView;
-                GridView leftGridView = leftListView.View as GridView;
-                GridView rightGridView = rightListView.View as GridView;
-                listView_SizeChanged(leftListView, null);
-                listView_SizeChanged(rightListView, null);
-
-                for (int i = 0; i < leftlist.Items.Count; i++)
-                {
-                    var fighter = leftlist.Items[i] as Fighter;
-                    army1.Fighters.Add(fighter);
-                }
-                for (int i = 0; i < rightlist.Items.Count; i++)
-                {
-                    var fighter = rightlist.Items[i] as Fighter;
-                    army2.Fighters.Add(fighter);
-                }
+                listView_SizeChanged(leftlist, null);
+                listView_SizeChanged(rightlist, null);
                 StartBtn.Content = "Next Round";
             }
-            if (army1.IsAlive && army2.IsAlive)
+            if (_army1.IsAlive && _army2.IsAlive)
             {
-                _controller.Round(army1, army2, RoundOverLog);
+                _controller.Round(_army1, _army2, RoundOverLog);
                 LogDelimiter();
                 SortListView(rightlist);
                 SortListView(leftlist);
-                if (!army1.IsAlive || !army2.IsAlive)
+                if (!_army1.IsAlive || !_army2.IsAlive)
                 {
                     SortListView(rightlist);
                     SortListView(leftlist);
-                    GameResult(army1, army2);
+                    GameResult(_army1, _army2);
                     StartBtn.IsEnabled = false;
                 }
             }

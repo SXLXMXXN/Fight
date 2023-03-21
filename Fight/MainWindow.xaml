@@ -110,7 +110,7 @@
         
 
         <Viewbox Grid.Row="2" Margin="0,0,0,0" MinHeight="20" MinWidth="20" VerticalAlignment="Bottom"   >
-            <Button Content="+" Name="leftAdd" Foreground="#FF139E00"  Click="Add_Btn_Click" Width="17" Height="17"  >
+            <Button Content="+" Name="leftAdd" Foreground="#FF139E00"  Click="Add_BtnLeft_Click" Width="17" Height="17"  >
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Grid >
@@ -127,7 +127,7 @@
         </Viewbox>
 
         <Viewbox Grid.Row="2" Grid.Column="2" Margin="0,0,0,0" MinHeight="20" MinWidth="20" VerticalAlignment="Bottom"   >
-            <Button Content="+" Name="rightAdd" Foreground="#FF139E00"  Click="Add_Btn_Click" Width="17" Height="17"  >
+            <Button Content="+" Name="rightAdd" Foreground="#FF139E00"  Click="Add_BtnRight_Click" Width="17" Height="17"  >
                 <Button.Template >
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <Grid >

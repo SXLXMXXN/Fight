@@ -12,24 +12,6 @@ namespace Fight
         private MainWindow _mainWindow;
         private Random _random = new Random();
         public Controller (MainWindow m) { _mainWindow = m; }
-        public int LeftID = 0;
-        public int RightID = 0;
-
-        public int GetID(string army)
-        {
-            int result = 0;
-            if (army == "left")
-            {
-                result = LeftID;
-                LeftID++;
-            }
-            else if (army == "right")
-            {
-                result = RightID;
-                RightID++;
-            }
-            return result;
-        }
 
         public static List<Fighter> BubbleSortBySpeed(List<Fighter> army)
         {

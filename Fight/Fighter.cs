@@ -52,9 +52,11 @@ namespace Fight
         public static string TypeCavalry => WarriorType.Cavalry.ToString().ToLower();
         public static WarriorType FromString(string source)
         {
-            bool result = Enum.TryParse(source, true, out WarriorType type);
-            
-            return type;
+            if (Enum.TryParse(source, true, out WarriorType type))
+            {
+                return type;
+            }
+            throw new Exception("Cant Parse");
         }
 
         public void InitHealth()

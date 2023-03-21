@@ -13,10 +13,19 @@ namespace Fight
         public bool HasMoved = false;
         public bool IsAlive = true;
         public int TotalDamage = 0;
+        private int _lastID;
+        public int GetLastID 
+        { get 
+            {
+                _lastID++;
+                return _lastID; 
+            } 
+        }
 
         public Army(string name) { Name = name; }
 
         public List<Fighter> Fighters = new List<Fighter>();
+
         public List<Fighter> GetListOfFastest(float procent)
         {
             Controller.BubbleSortBySpeed(Fighters);
@@ -39,6 +48,7 @@ namespace Fight
             }
             return fastest;
         }
+
         public List<Fighter> GetListOfAlive()
         {
             List<Fighter> alive = new List<Fighter>();
@@ -51,6 +61,12 @@ namespace Fight
             }
             return alive;
         }
-        
+
+        public void Reset()
+        {
+            IsAlive = true;
+            Fighters.Clear();
+            _lastID = 0;
+        }
     }
 }
